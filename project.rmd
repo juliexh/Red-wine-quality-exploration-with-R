@@ -1,0 +1,517 @@
+```{r global_options, echo=FALSE}
+ library("knitr")
+ knitr::opts_chunk$set(fig.width=7,fig.height=6,fig.path='Figs/',
+                      fig.align='center',tidy=TRUE,
+                      echo=FALSE,warning=FALSE,message=FALSE)
+ ```
+
+
+---
+output:
+  html_document: default
+  pdf_document: default
+---
+XUE HUA ZHANG
+========================================================
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Load all of the packages that you end up using in your analysis in this code
+# chunk.
+
+# Notice that the parameter "echo" was set to FALSE for this code chunk. This
+# prevents the code from displaying in the knitted HTML output. You should set
+# echo=FALSE for all code chunks in your file, unless it makes sense for your
+# report to show the code that generated a particular plot.
+
+# The other parameters for "message" and "warning" should also be set to FALSE
+# for other code chunks once you have verified that each plot comes out as you
+# want it to. This will clean up the flow of your report.
+
+library(GGally)
+library(scales)
+library(memisc)
+library(gridExtra)
+library(ggforce)
+library(units)
+
+```
+```{r}
+install.packages('ggplot2', dependencies = T)
+update.packages('ggplot2)
+library(ggplot2)
+df<-read.csv("pseudo_facebook.tsv", sep='\t')
+
+qplot(x=dob_day, data=df)
+```
+
+```{r echo=FALSE, Load_the_Data, warning=FALSE}
+# Load the Data
+
+setwd("C:\\Users\\zzxue_000\\Desktop\\eda\\project4")
+pf<-read.csv("wineQualityReds.csv",sep=',')
+summary(pf)
+
+
+```
+In this project, we consider a set of observations on a number of red wine varieties involving their chemical properties and ranking by tasters.Tne dataset has 1599 different varieties. Data are collected on 12 different properties of the wines one of which is Quality, based on sensory data, and the rest are on chemical properties of the wines including density, acidity, alcohol content etc. All chemical properties of wines are continuous variables. Quality is an ordinal variable with possible ranking from 1 (worst) to 10 (best). Each variety of wine is tasted by three independent tasters and the final rank assigned is the median rank given by the tasters.
+
+# Univariate Plots Section
+
+
+
+First, I plot the histograms of all the variables to show the distribution of the variable values. They are as follows.
+
+```{r echo=FALSE, Univariate_Plots_I, warning=FALSE}
+library(ggplot2)
+qplot(x=fixed.acidity,
+      data=pf, 
+      color=I("black"),
+      fill=I("#F79420"))+
+scale_x_continuous(breaks=seq(0,16,2),
+                   lim=c(0,16))
+
+```
+
+As it is shown in the histogram of the fixed.acidity, the values are between 4 and 16. The distribution is positively skewed.
+```{r echo=FALSE, Univariate_Plots_II, warning=FALSE}
+library(ggplot2)
+qplot(x=volatile.acidity,
+      data=pf, 
+      color=I("black"),
+      fill=I("#F79420"))+
+scale_x_continuous(breaks=seq(0,1.6,0.1),
+                   lim=c(0,1.6))
+```
+
+As it is shown in the histogram, the distribution of volatile.acidity follows a normal distibution.
+```{r echo=FALSE, Univariate_Plots_III, warning=FALSE}
+qplot(x=citric.acid,
+      data=pf,
+      color=I("black"),
+      fill=I("#F79420"))+
+scale_x_continuous(breaks=seq(0,1,0.1),
+                   lim=c(0,1))
+```
+
+As we can see from the figure, the distribution of citric is positively skewed.
+```{r echo=FALSE, Univariate_Plots_IV, warning=FALSE}
+library(ggplot2)
+qplot(x=residual.sugar,
+      data=pf, 
+      color=I("black"),
+      fill=I("#F79420"))
+```
+
+As it is shown in the histogram of residual.sugar, the distribution is long tail. We can transform it to normal distribution with a log10 scale.
+```{r echo=FALSE, Univariate_Plots_IIV, warning=FALSE}
+qplot(x=free.sulfur.dioxide,
+          data=pf, 
+          color=I("black"),
+          fill=I("#F79420"))
+
+```
+
+By plotting the histogram of free.sulfur.dioxide, we observe that the distribution is positively skewed.
+```{r echo=FALSE, Univariate_Plots_IIIV, warning=FALSE}
+qplot(x=chlorides,
+          data=pf,
+          color=I("black"),
+          fill=I("#F79420"))
+```
+
+The histogram of chlorides shows that the distibution has a long tail. Therefore, we can transform it to normal with a log10 scale.
+```{r echo=FALSE, Univariate_Plots_V, warning=FALSE}
+qplot(x=total.sulfur.dioxide,
+      data=pf, 
+      color=I("black"),
+      fill=I("#F79420"))
+```
+
+The distribution of total.sulfur.dioxide is positively skewed.
+```{r echo=FALSE, Univariate_Plots_VI, warning=FALSE}
+qplot(x=density,
+      data=pf, 
+      color=I("black"),
+      fill=I("#F79420"))
+```
+
+As it is shown in the histogram of density, the distribution follows a normal distribution.
+```{r echo=FALSE, Univariate_Plots_VII, warning=FALSE}
+qplot(x=pH,
+      data=pf, 
+      color=I("black"),
+      fill=I("#F79420"))
+
+```
+
+As it is shown in the histogram of pH, the distribution of pH follows a normal distribution.
+```{r echo=FALSE, Univariate_Plots_C, warning=FALSE}
+qplot(x=sulphates,
+      data=pf, 
+      color=I("black"),
+      fill=I("#F79420"))
+```
+
+As it is shown in the histogram of sulphates, the distribution of sulphates is positively skewed.
+```{r echo=FALSE, Univariate_Plots_XXL, warning=FALSE}
+
+qplot(x=alcohol,
+      data=pf, 
+      color=I("black"),
+      fill=I("#F79420"))
+```
+
+As it is shown in the histogram of alcohol, the values of alcohol have a range from 8 to 14 and the distribution of sulphates is positively skewed.
+```{r echo=FALSE, Univariate_Plots_IX, warning=FALSE}
+qplot(x=quality,
+      data=pf, 
+      color=I("black"),
+      fill=I("#F79420"),
+      binwidth=1)+
+  scale_x_continuous(breaks=seq(0,10,1),
+                   lim=c(0,10))
+```
+
+Quality has most values concentrated in the categories 5, 6 and 7. Only a small proportion is in the categories [3, 4] and [8, 9] and none in the categories [1, 2] and 10.
+```{r echo=FALSE, Univariate_Plots_X, warning=FALSE}
+ggplot(aes(x=residual.sugar),
+       data=pf)+
+  geom_histogram(color=I("black"),
+                 fill=I("#F79420"))+
+  scale_x_log10()
+```
+We scale the residual.sugar by log10 to transform it to a normal distribution.
+```{r echo=FALSE, Univariate_Plots_XX, warning=FALSE}
+ggplot(aes(x=chlorides),
+       data=pf)+
+  geom_histogram(color=I("black"),
+                 fill=I("#F79420"))+
+  scale_x_log10()
+```
+We scale the chlorides by log10 to transform it to a normal distribution.
+
+
+Second, I plot the boxplots of all the variables except quality to show the statistic information of the variable values. They are as follows.
+
+```{r echo=FALSE, Univariate_Plots_XIV, warning=FALSE}
+p1<-qplot(x=1,
+          y=fixed.acidity,
+          data=pf,
+          geom='boxplot')
+p2<-qplot(x=1,
+          y=volatile.acidity,
+          data=pf,
+          geom='boxplot')
+p3<-qplot(x=1,
+          y=citric.acid,
+          data=pf,
+          geom='boxplot')
+p4<-qplot(x=1,
+          y=residual.sugar,
+          data=pf,
+          geom='boxplot')
+grid.arrange(p1,p2,p3,p4,ncol=2)
+
+```
+```{r echo=FALSE, Univariate_Plots_XVI, warning=FALSE}
+p5<-qplot(x=1,
+          y=free.sulfur.dioxide,
+          data=pf,
+          geom='boxplot')
+p6<-qplot(x=1,
+          y=chlorides,
+          data=pf,geom='boxplot')
+p7<-qplot(x=1,
+          y=total.sulfur.dioxide,
+          data=pf,
+          geom='boxplot')
+p8<-qplot(x=1,
+          y=density,
+          data=pf,
+          geom='boxplot')
+grid.arrange(p5,p6,p7,p8,ncol=2)
+```
+
+```{r echo=FALSE, Univariate_Plots_IL, warning=FALSE}
+p9<-qplot(x=1,
+          y=pH,data=pf,
+          geom='boxplot')
+p10<-qplot(x=1,
+           y=sulphates,
+           data=pf,geom='boxplot')
+p11<-qplot(x=1,
+           y=alcohol,
+           data=pf,
+           geom='boxplot')
+grid.arrange(p9,p10,p11,ncol=2)
+```
+
+
+# Univariate Analysis
+
+### What is the structure of your dataset?
+This red wine data set contains 1,599 obersvations with 11 variables on the chemical properties of the wine and one quality variable. Quality has most values concentrated in the categories 5, 6 and 7. Only a small proportion is in the categories [3, 4] and [8, 9] and none in the categories [1, 2] and 10. All variables have outliers
+
+
+### What is/are the main feature(s) of interest in your dataset?
+My aim is to study the relationship between the chemical properties of the wine and the quality. Therefore, the main feature is the quality.  
+
+### What other features in the dataset do you think will help support your study?
+For now, I do not have idea which chemical properties are closely related to the quality. I guess that fixed.acidity, volatile.acidity, citric.acid,residual.sugar and alcohol are closely related to the quality.But we need to find out in the following exploration.
+
+### Did you create any new variables from existing variables in the dataset?
+The ratings of wine quality is in range from 0 to 10. I create a new categorical variable which classifies the wines as 'bad' (rating 0 to 4), 'good' (rating 5 or 6), and 'excellent' (rating 7 to 10).
+
+```{r echo=FALSE, Univariate_Plots_VIII, warning=FALSE}
+attach(pf)
+pf$rating[quality<=4]<-"bad"
+pf$rating[4<quality&quality<=6]<-"good"
+pf$rating[6<quality&quality<=10]<-"excellent"
+detach(pf)
+pf$rating <- factor(pf$rating, levels = c( "bad", "good", "excellent"  ))
+```
+
+```{r echo=FALSE, Univariate_Plots_XC, warning=FALSE}
+qplot(x=rating,
+      data=pf, 
+      color=I("black"),
+      fill=I("#F79420"))
+```
+As we can see from the figure, most of the values are in the categorical of good.
+
+### Of the features you investigated, were there any unusual distributions? \
+Some observation on the distribution of the chemical property are as follows:
+
+Normal: Volatile acidity, Density, PH
+
+Positively Skewed: Fixed acidity, Citric acid, Free sulfur dioxide, Total sulfur dioxide, Sulphates, Alcohol
+
+Long Tail: Residual sugar, Chlorides
+
+Did you perform any operations on the data to tidy, adjust, or change the form \
+of the data? If so, why did you do this?
+I performed log10 scale to the long tail datasets which are Residual sugar and Chlorides.The long tail datas are over dispersed. So we transform the datas to short the tail to see standard derivation or order of magnitudes. 
+
+
+
+
+# Bivariate Plots Section
+
+To study the realtionship between chemical variables and quality, I plot boxplot for each chemical variables as a facor of quality.  
+
+```{r echo=FALSE, Bivariate_Plots_I, warning=FALSE}
+p1<-qplot(x=as.factor(quality),
+          y=fixed.acidity,
+          data=pf,
+          geom='boxplot')
+p2<-qplot(x=as.factor(quality),
+          y=volatile.acidity,
+          data=pf,
+          geom='boxplot')
+p3<-qplot(x=as.factor(quality),
+          y=citric.acid,
+          data=pf,
+          geom='boxplot')
+p4<-qplot(x=as.factor(quality),
+          y=residual.sugar,
+          data=pf,
+          geom='boxplot')
+grid.arrange(p1,p2,p3,p4,ncol=2)
+```
+
+```{r echo=FALSE, Bivariate_Plots_II, warning=FALSE}
+p5<-qplot(x=as.factor(quality),
+          y=free.sulfur.dioxide,
+          data=pf,
+          geom='boxplot')
+p6<-qplot(x=as.factor(quality),
+          y=chlorides,
+          data=pf,
+          geom='boxplot')
+p7<-qplot(x=as.factor(quality),
+          y=total.sulfur.dioxide,
+          data=pf,
+          geom='boxplot')
+p8<-qplot(x=as.factor(quality),
+          y=density,
+          data=pf,
+          geom='boxplot')
+grid.arrange(p5,p6,p7,p8,ncol=2)
+```
+
+```{r echo=FALSE, Bivariate_Plots_III, warning=FALSE}
+p9<-qplot(x=as.factor(quality),
+          y=pH,
+          data=pf,
+          geom='boxplot')
+p10<-qplot(x=as.factor(quality),
+           y=sulphates,
+           data=pf,
+           geom='boxplot')
+p11<-qplot(x=as.factor(quality),
+           y=alcohol,
+           data=pf,
+           geom='boxplot')
+grid.arrange(p9,p10,p11,ncol=2)
+```
+
+By studying the boxplots, we have the following observations.It seems that high quality wine has more alcohol, sulphates, citric.acid and less volatile.acity. In order to futher study the relationship between these variables, we have the corrplot which is shown below.
+
+```{r echo=FALSE, Bivariate_Plots_IV, warning=FALSE}
+
+library(corrplot)
+M <- cor(pf[,sapply(pf,is.numeric)])
+corrplot(M,method = 'number')
+
+```
+As shown in the figure, I observe strong correlations among acid variables and PH. There is also a strong correlation between dioxide variables.The corresponding scatter plots are as follows.
+
+```{r echo=FALSE, Bivariate_Plots_VI, warning=FALSE}
+ggplot(data = pf, 
+           aes(x = fixed.acidity, 
+               y = citric.acid)) +
+  geom_jitter(alpha=0.5,size=1.5)
+
+```
+As it is shown in the figure, the value of fixed.acidity increases as the value of citric.acid increases.
+```{r echo=FALSE, Bivariate_Plots_VII, warning=FALSE}
+ggplot(data = pf, 
+           aes(x = citric.acid,
+               y = volatile.acidity)) +
+ geom_jitter(alpha=0.5,size=1.5)
+```
+As the value of citric.acid increases, the value of volatile.acidity decreases.
+```{r echo=FALSE, Bivariate_Plots_VIII, warning=FALSE}
+ggplot(data = pf, 
+           aes(x = free.sulfur.dioxide,
+               y = total.sulfur.dioxide)) +
+  geom_jitter(alpha=0.5,size=1.5)
+```
+We can observe from the figure that the value of free.sulfur.dioxide increases as the value of total.sulfur.dioxide increases.
+```{r echo=FALSE, Bivariate_Plots_X, warning=FALSE}
+ggplot(data = pf, 
+           aes(x = fixed.acidity, 
+               y = pH)) +
+  geom_jitter(alpha=0.5,size=1.5)
+```
+The value of PH decreases as the value of fixed.acidity increases.
+```{r echo=FALSE, Bivariate_Plots_XI, warning=FALSE}
+ggplot(data = pf,
+           aes(x = citric.acid, 
+               y = pH)) +
+  geom_jitter(alpha=0.5,size=1.5)
+```
+The value of PH is also decreases as the value of citric.acid increases.
+
+# Bivariate Analysis
+
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. How did the feature(s) of interest vary with other features in \
+the dataset?
+
+I find that alcohol,sulphates,volatile acidity and citric acid have high correlations to the quality. It seems that high quality wine has more alcohol, sulphates, citric.acid and less volatile.acity. 
+
+### Did you observe any interesting relationships between the other features \
+(not the main feature(s) of interest)?
+
+There are strong correlations among acid vaiables and PH. There is also a strong correlation between the two dioxide variables.
+
+### What was the strongest relationship you found?
+The most intersting relationship that I find is that alcohol has a strong postive correlation with the quality.
+
+# Multivariate Plots Section
+
+
+```{r echo=FALSE, Multivariate_Plots_I, warning=FALSE}
+ggplot(data=pf, 
+       aes(y=alcohol,
+           x=volatile.acidity,
+           color = as.factor(quality) ) )+
+        geom_jitter(alpha=1/2,size=3)+
+   scale_color_brewer(type='seq')
+      
+```
+```{r echo=FALSE, Multivariate_Plots_II, warning=FALSE}
+ggplot(data=pf, 
+       aes(y=citric.acid,
+           x=sulphates,
+           color = as.factor(quality)) )+
+        geom_jitter(alpha=1/2,size=3)+
+  scale_color_brewer(type='seq')
+```
+
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. Were there features that strengthened each other in terms of \
+looking at your feature(s) of interest?
+It's clear that a higher citric acid ,sulphates and alcohol contributes towards better wines. Likewise, better wines tended to have lower volatile acid.
+
+### Were there any interesting or surprising interactions between features?
+No
+
+### OPTIONAL: Did you create any models with your dataset? Discuss the \
+strengths and limitations of your model.
+
+
+
+# Final Plots and Summary
+
+### Plot One
+```{r}
+qplot(x=quality,
+      data=pf, 
+      color=I("black"),
+      fill=I("#F79420"),
+      binwidth=1)+
+  scale_x_continuous(breaks=seq(0,10,1),
+                   lim=c(0,10))
+```
+
+### Description One
+Quality has most values concentrated in the categories 5, 6 and 7. Only a small proportion is in the categories [3, 4] and [8, 9] and none in the categories [1, 2] and 10.
+
+### Plot Two
+```{r echo=FALSE, Plot_Two, warning=FALSE}
+ggplot(data=pf, 
+       aes(y=alcohol,
+           x=volatile.acidity,
+           color = as.factor(quality)))+
+        geom_jitter(alpha=1/2,size=3)+
+   scale_color_brewer(type='seq')+
+      xlab("volatile acidity - (g / dm^3)") +
+  ylab("alcohol - (% by volume)") +
+      ggtitle("Volatile acidity, Alcohol and Quality")
+```
+
+### Description Two
+In plot two, we have a observation that high quality wine has higher alcohol and lower volatile acidity.
+
+### Plot Three
+```{r echo=FALSE, Plot_Three, warning=FALSE}
+ggplot(data=pf, 
+       aes(y=citric.acid,
+           x=sulphates,
+           color = as.factor(quality)))+
+        geom_jitter(alpha=1/2,size=3)+
+  scale_color_brewer(type='seq')+
+      xlab("sulphates- (g / dm^3)") + 
+  ylab("citric acid- (g / dm^3)") +
+      ggtitle("Citric Acid and Sulphates and Quality")
+
+```
+
+### Description Three
+
+In plot three, we have a observation that high quality wine has higher sulphatesy and higher citric acid.
+
+# Reflection
+
+
+In this study, I explored the relationships among the 11 variables in the dataset. My aim is to find out what determine the quality of the wine. After the exploration, I find that volatile.acidity,alcohol,sulphates and citric.acid are the key factors in determining the quality of the wine. 
+
+The challenge in the process is the lacking of the chemical property knowledge of the wine. Therefore, I do not have a  prior knowledge in helping the exploration. I have to check all the relationships one by one based on the visualization.
+
+As for future work, it would be interesting to bulid predict models for the wine quality.
