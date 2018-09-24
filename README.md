@@ -9,8 +9,8 @@ After installing R, you will need to download and install R Studio. Choose the a
 Finally, you will need to install a few packages. We recommend opening R Studio and installing the following packages using the command line.
 
 
---- install.packages("ggplot2", dependencies = T) 
---- install.packages("knitr", dependencies = T)
---- install.packages("dplyr", dependencies = T)
+- install.packages("ggplot2", dependencies = T) 
+- install.packages("knitr", dependencies = T)
+- install.packages("dplyr", dependencies = T)
 
 For more information on installing R packages, please refer to Installing R Packages on R Bloggers.
